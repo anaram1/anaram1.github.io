@@ -2,17 +2,90 @@
 <html>
 <head>
   <link rel="stylesheet" href="index.css"> My Webpage
+  <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.6.0.js"></script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+       <script src="https://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
 </head>
 
 <body>
-<h1> BRIANA </h1>
-<button type="button">Toggle LED</button>
-<h1> OLIVIA </h1>
-<p> hi my name is ananya </p> <br>
-<strong>this is bold</strong>
-this is <em>italic</em>
-  <a href="http://google.com">google.com</a>
-  <img src="https://pbs.twimg.com/profile_images/269279233/llama270977_smiling_llama_400x400.jpg">
-<ul></ul?
+<h1> BEARDIE FEEDER PROJECT</h1>
+<strong> by ananya ram </strong> <br>
+
+<button type="button" id= "tooogle" onclick="SwitchImage()">Toggle LED</button>
+
+<div id="myDIV">
+<img id="TheImage" src="http://www.clker.com/cliparts/y/D/L/V/s/t/led-off-hi.png">
+</div>
+<nav class= 'navClass'>
+  <ul>
+    <li>Home</li>
+    <li>About Me</li>
+    <li>Projects</li>
+  </ul>
+</nav>
+
+<script>
+var pubnub = PUBNUB.init({
+                 publish_key: 'pub-c-3baad549-1c9e-408e-8f33-45ad1d8317ec',
+                subscribe_key: 'sub-c-877b16f4-1314-11e7-b568-0619f8945a4f'
+            });
+
+var ImageOne = true;
+var LEDoff = "http://www.clker.com/cliparts/y/D/L/V/s/t/led-off-hi.png";
+var LEDon = "http://www.clker.com/cliparts/5/I/2/4/C/X/red-led-off-hi.png";
+
+function SwitchImage() {
+
+if (ImageOne)
+   {
+       ImageOne = false;
+       UpdateBackground(LEDon);
+   } else {
+       ImageOne = true;
+       UpdateBackground(LEDoff);
+   }
+   function UpdateBackground(Url)
+   {
+    document.getElementById("TheImage").src=Url;
+   }
+}
+
+pubnub.subscribe ({
+    channel:'gpio-raspberry-control',
+    message: function (m){
+
+    {console.log(m)}
+
+
+        if ('resp' in m){
+
+          if('on' == m['resp']){
+            $('#led').removeClass ('dim');
+            $('#led').addClass ('glow');
+
+      } else {
+
+          $('#led').removeClass('glow');
+          $('#led').addClass ('dim');
+          }
+      }
+  }
+});
+$(document).ready(function() {
+$('#toooggle').click(function(e){
+
+        pubmsg = { "req" : "toooggle" };
+
+        pubnub.publish(
+
+                {
+                        channel : 'gpio-raspberry-control' ,
+                        message :  pubmsg
+                }
+        );
+    });
+});
+</script>
+
 </body>
 </html>

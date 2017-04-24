@@ -1,8 +1,29 @@
+.navClass >ul {
+background-color:#5E5D5D;
+color:#D8D8D8
+font-size:20px;
+font-family:sans-serif;
+
+}
+.navClass > ul > li{
+  list-style-type:none;
+  display:inline-block;
+//you can simplify the lower four lines by saying padding 5px 25px
+  padding-top:5px;
+  padding-bottom: 5px;
+  padding-left:25px;
+  padding-right:25px;
+
+}
+
 body {
-    background-color: yellow;
+    background-color: #999999 ;
 }
 h1{
     background: #00ff00;
+}
+h2{
+    background: yellow;
 }
 p{
     background-color: rgb (255,0,255)
