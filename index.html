@@ -2,9 +2,8 @@
 <html>
 <head>
   <link rel="stylesheet" href="index.css"> My Webpage
-  <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.6.0.js"></script>
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-       <script src="https://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
+  <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.8.0.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
 
 <body>
@@ -25,10 +24,37 @@
 </nav>
 
 <script>
-var pubnub = PUBNUB.init({
-                 publish_key: 'pub-c-3baad549-1c9e-408e-8f33-45ad1d8317ec',
-                subscribe_key: 'sub-c-877b16f4-1314-11e7-b568-0619f8945a4f'
-            });
+var pubnub = new PubNub({
+    subscribeKey: "sub-c-877b16f4-1314-11e7-b568-0619f8945a4f",
+    publishKey: "pub-c-3baad549-1c9e-408e-8f33-45ad1d8317ec"
+    // ssl: true
+});
+pubnub.addListener({
+  message:function(message){
+    console.log(message)
+  }
+})
+console.log("test");
+pubnub.subscribe ({
+channels:['gpio-raspberry-control']
+// message: function(message){
+//
+// console.log(message);
+//
+//     // if ('resp' in message){
+//
+//   //     if('on' == m['resp']){
+//   //       $('#led').removeClass ('dim');
+//   //       $('#led').addClass ('glow');
+//   //
+//   // } else {
+//   //
+//   //     $('#led').removeClass('glow');
+//   //     $('#led').addClass ('dim');
+//   //     }
+//   // }
+// }
+});
 
 var ImageOne = true;
 var LEDoff = "http://www.clker.com/cliparts/y/D/L/V/s/t/led-off-hi.png";
@@ -48,29 +74,16 @@ if (ImageOne)
    {
     document.getElementById("TheImage").src=Url;
    }
+   pubnub.publish({
+     message:{
+     "color":"blue"
+   },
+   channel:'gpio-raspberry-control'
+ });
 }
 
-pubnub.subscribe ({
-    channel:'gpio-raspberry-control',
-    message: function (m){
+// console.log(MyVariable);
 
-    {console.log(m)}
-
-
-        if ('resp' in m){
-
-          if('on' == m['resp']){
-            $('#led').removeClass ('dim');
-            $('#led').addClass ('glow');
-
-      } else {
-
-          $('#led').removeClass('glow');
-          $('#led').addClass ('dim');
-          }
-      }
-  }
-});
 $(document).ready(function() {
 $('#toooggle').click(function(e){
 
